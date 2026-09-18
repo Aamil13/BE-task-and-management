@@ -17,7 +17,6 @@ export const startTracking = catchAsync(async (req: AuthRequest, res: Response) 
   }
 
   const { taskId } = req.params;
-console.log("taskId",taskId)
   const result = await timeLogService.startTracking(taskId, req.user.id);
   res.status(httpStatus.CREATED).json({
     status: 'success',
@@ -93,6 +92,23 @@ export const getTaskTimeTotal = catchAsync(async (req: AuthRequest, res: Respons
     data: { total: result },
   });
 });
+
+
+
+export const getUserAllTaskTimeTotal = catchAsync(async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    throw new Error('Unauthorized');
+  }
+
+  const result = await timeLogService.getUserAllTaskTimeTotal( req.user.id);
+  res.status(httpStatus.OK).json({
+    status: 'success',
+    data: { total: result },
+  });
+});
+
+
+
 
 /**
  * GET /api/time-logs
