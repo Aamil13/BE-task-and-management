@@ -147,6 +147,37 @@ export async function getTaskTimeTotal(
   };
 }
 
+
+// for all task by user id
+
+export async function getUserAllTaskTimeTotal(
+  userId: string
+): Promise<TaskTimeTotal | any > {
+
+  const [aggregate, activeSession] = await Promise.all([
+    TimeLogModel.aggregate<{ _id: null; total: number }>([
+      {
+        $match: {
+          userId: new Types.ObjectId(userId),
+          status: TimeLogStatus.COMPLETED,
+        },
+      },
+      { $group: { _id: null, total: { $sum: '$durationSeconds' } } },
+    ]),
+    TimeLogModel.findOne({
+      userId,
+      status: TimeLogStatus.ACTIVE,
+    }).lean(),
+  ]);
+
+  return {
+    userId,
+    totalDurationSeconds: aggregate[0]?.total ?? 0,
+    activeSession: activeSession ?? null,
+  };
+}
+
+
 /**
  * Lists all time logs for the caller across all tasks, most recent
  * first. Used for a "recent activity" / history view.

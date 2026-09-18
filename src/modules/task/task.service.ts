@@ -1,5 +1,5 @@
 import * as taskRepository from './task.repository';
-import { NotFoundError, UnauthorizedError } from '../../middlewares/error.middleware';
+import { NotFoundError } from '../../middlewares/error.middleware';
 import { ICreateTaskInput, IUpdateTaskInput, ITaskResponse, TaskStatus } from './task.interface';
 import logger from '../../utils/logger';
 

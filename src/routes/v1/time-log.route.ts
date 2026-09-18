@@ -21,16 +21,24 @@ router.post(
 router.get(
   '/tasks/:taskId/time-logs',
   authenticate,
-  validate(getLogsForTaskParamsSchema),
+  validate(getLogsForTaskParamsSchema,"params"),
   timeLogController.getLogsForTask
 );
 
 router.get(
   '/tasks/:taskId/time-logs/total',
   authenticate,
-  validate(getTaskTimeTotalParamsSchema),
+  validate(getTaskTimeTotalParamsSchema,"params"),
   timeLogController.getTaskTimeTotal
 );
+
+router.get(
+  '/time-logs/total',
+  authenticate,
+  timeLogController.getUserAllTaskTimeTotal
+);
+
+
 
 // User-scoped time-log routes
 router.post('/time-logs/active/stop',authenticate, timeLogController.stopActiveTracking);
