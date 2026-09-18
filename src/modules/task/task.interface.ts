@@ -40,3 +40,13 @@ export interface ITaskResponse {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IPaginatedTasksResponse {
+  tasks: ITaskResponse[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}

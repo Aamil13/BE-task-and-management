@@ -12,7 +12,7 @@ router.post(
   taskController.createTask
 );
 
-router.get('/', authenticate, taskController.getAllTasks);
+router.get('/', authenticate, validate(taskValidation.getAllTasksSchema, 'query'), taskController.getAllTasks);
 
 router.get('/:id', authenticate, taskController.getTaskById);
 

@@ -1,6 +1,6 @@
 import * as taskRepository from './task.repository';
 import { NotFoundError } from '../../middlewares/error.middleware';
-import { ICreateTaskInput, IUpdateTaskInput, ITaskResponse, TaskStatus } from './task.interface';
+import { ICreateTaskInput, IUpdateTaskInput, ITaskResponse, IPaginatedTasksResponse, TaskStatus } from './task.interface';
 import logger from '../../utils/logger';
 
 const formatTask = (task: any): ITaskResponse => ({
@@ -25,9 +25,26 @@ export const createTask = async (userId: string, input: ICreateTaskInput): Promi
   return formatTask(task);
 };
 
-export const getAllTasks = async (userId: string): Promise<ITaskResponse[]> => {
-  const tasks = await taskRepository.findByUserId(userId);
-  return  tasks.map(formatTask);
+export const getAllTasks = async (
+  userId: string,
+  page: number,
+  limit: number
+): Promise<IPaginatedTasksResponse> => {
+  const skip = (page - 1) * limit;
+  const [tasks, total] = await Promise.all([
+    taskRepository.findByUserId(userId, skip, limit),
+    taskRepository.countByUserId(userId),
+  ]);
+
+  return {
+    tasks: tasks.map(formatTask),
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
 
 export const getTaskById = async (taskId: string, userId: string): Promise<ITaskResponse> => {

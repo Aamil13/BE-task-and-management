@@ -13,6 +13,11 @@ export const createTaskSchema = Joi.object({
 
 });
 
+export const getAllTasksSchema = Joi.object({
+  page: Joi.number().integer().min(1).default(1),
+  limit: Joi.number().integer().min(1).max(100).default(10),
+});
+
 export const updateTaskSchema = Joi.object({
   title: Joi.string().trim().min(1).max(200).optional().messages({
     'string.min': 'Title must be at least 1 character long',
