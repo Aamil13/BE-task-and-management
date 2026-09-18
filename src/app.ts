@@ -3,10 +3,10 @@ import helmet from 'helmet';
 import cors from 'cors';
 import hpp from 'hpp';
 import compression from 'compression';
-import pinoHttp from 'pino-http';
+
 import { globalLimiter } from './middlewares/rateLimiter.middleware';
 import { errorHandler } from './middlewares/error.middleware';
-import logger from './utils/logger';
+import  { httpLogger } from './utils/logger';
 import routes from './routes/v1';
 
 const app: Application = express();
@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Utility
 app.use(compression() as any);
-app.use(pinoHttp({ logger }) as any);
+app.use(httpLogger);
 
 // Routes
 app.use('/api/v1', routes);

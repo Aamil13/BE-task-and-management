@@ -10,6 +10,7 @@ export interface AuthRequest extends Request {
 export const authenticate = (req: AuthRequest, _res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
+    console.log("authHeader",authHeader)
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new UnauthorizedError('No token provided');
     }
